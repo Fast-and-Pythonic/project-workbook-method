@@ -1,0 +1,14 @@
+{
+  "name": "workbook-loader",
+  "version": "0.1.0",
+  "description": "Puts the project workbook's start.md, status.md and top journal entries into the model's context at session start, in full: step 1 of the session protocol done before the first turn.",
+  "author": { "name": "Fast-and-Pythonic" },
+  "userConfig": {
+    "journalEntries": {
+      "type": "number",
+      "title": "Journal entries",
+      "description": "How many of the newest journal.md entries to load (the index is never loaded). 0 loads none.",
+      "default": 4
+    }
+  }
+}

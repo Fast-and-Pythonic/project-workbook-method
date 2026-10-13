@@ -154,9 +154,19 @@ Finding a problem before you write the commit message is cheaper than after. If 
 project is not under version control, say so in `_meta.md` and record which hard rules
 are consequently demoted to advice — see [DEVIATIONS.md](../DEVIATIONS.md).
 
+## `mods/workbook-loader/`
+
+A Claude Code mod that does step 1 of the session protocol in full: at session start it
+puts `start.md`, `status.md` and the top four `journal.md` entries in front of the first
+turn, with no size cap — a mod's context is not cut to a preview the way a command hook's
+output is. Where the command hook below also runs, the mod drops that hook's copy of
+`start.md`, so the agent sees one. If the mod fails, the hook's copy stays: that is the
+fallback, not a bug. Enabling it is the person's choice: a repository cannot turn a mod on
+for a visitor. See [mods/workbook-loader/README.md](mods/workbook-loader/README.md).
+
 ## `hooks/claude-code-session-start.sh`
 
-Loads `project-workbook/start.md` into a Claude Code session before its first turn. This is the
+The fallback where mods are unavailable (cloud sessions, older Claude Code). Loads `project-workbook/start.md` into a Claude Code session before its first turn. This is the
 mechanism behind step 1 of the session protocol ([RULES.md §3](../RULES.md#3-session-protocol)):
 without it, reading `start.md` rests on an instruction in the root pointer, and an agent
 that judges a task too small to count as "starting work" skips it — in the case that
