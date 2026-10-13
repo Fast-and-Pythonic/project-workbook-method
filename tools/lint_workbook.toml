@@ -44,6 +44,9 @@ path_roots = ["", "project-workbook"]
 ignore_dirs = [".git", "node_modules", "build", "target", "dist", ".cxx", ".gradle",
                ".idea", "__pycache__", "venv", ".venv"]
 root_pointers = ["AGENTS.md", "CLAUDE.md", ".cursorrules", ".github/copilot-instructions.md"]
+# The file for a person joining the project (check 21). "" turns the check off, for a
+# document set nobody else will join.
+onboarding = "ONBOARDING.md"
 # Paths that legitimately do not exist: an artefact the docs declare as not yet written,
 # a file in someone else's repository, a build output that only exists after a build.
 # Keep the reason beside each one.

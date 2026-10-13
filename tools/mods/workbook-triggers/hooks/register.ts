@@ -28,6 +28,24 @@ const GIT_TIMEOUT_MS = 5_000
 const MAX_HINT_LINES = 5
 const EDIT_TOOLS = new Set(['Edit', 'Write', 'MultiEdit', 'NotebookEdit'])
 const SHELL_TOOLS = new Set(['Bash', 'PowerShell'])
+/**
+ * The untagged rows of RULES.md §2, for where the mod runs without the standard
+ * around it: installed from the marketplace, its folder is copied on its own. Where
+ * RULES.md is three levels up, as in a checkout of the standard, it is read instead,
+ * so this copy matters only to an installed mod; keep it in step by hand.
+ */
+export const FALLBACK_ROWS: readonly string[] = [
+  'Debugging > 30 min with a non-obvious cause -> gotchas.md: a G## — now, not "later"',
+  'A quirk of an external dependency -> gotchas.md: a G## with the dependency named in the title',
+  'A decision settled -> architecture.md: an A##',
+  'A fragile point was identified -> status.md: Fragile points',
+  'A feature was deliberately deferred -> status.md: Deferred, with the reason',
+  'A feature was finished -> status.md: Working; journal.md: an entry',
+  'Knowledge not tied to this project -> Mark the entry Portable: yes',
+  'A research answer to the user that outlives the session -> Into the matching file; the chat gets the short version with a link',
+  'A new file or subsystem appeared -> start.md: the map',
+  "The method itself changed -> The project's DELTA.md, and _meta.md if needed",
+]
 
 export type Thresholds = { minCodeEdits: number; failureRun: number; workMinutes: number }
 
@@ -106,7 +124,7 @@ export function triggerRows(rules: string): string[] {
   return rows
 }
 
-export function question(signs: string[], root: string, rows: string[]): string {
+export function question(signs: string[], root: string, rows: readonly string[]): string {
   const table = rows.length > 0 ? rows.map((r) => `- ${r}`).join('\n') : '- (see RULES.md §2 of the Project Workbook standard)'
   return [
     '[workbook-triggers] This message is an automatic check by the workbook-triggers mod, not a request from the user. Answer the check only; do not continue the task or address the user.',
@@ -160,12 +178,13 @@ export async function findRoot($: EngineInterface, cwd: string): Promise<string 
   return (await $.fs.exists(`${top}/${WORKBOOK}/start.md`)) ? top : undefined
 }
 
-async function readRules($: EngineInterface): Promise<string[]> {
+async function readRules($: EngineInterface): Promise<readonly string[]> {
   const path = `${slashes($.plugin.root)}/../../../RULES.md`
   try {
-    return (await $.fs.exists(path)) ? triggerRows(await $.fs.read(path)) : []
+    const rows = (await $.fs.exists(path)) ? triggerRows(await $.fs.read(path)) : []
+    return rows.length > 0 ? rows : FALLBACK_ROWS
   } catch {
-    return []
+    return FALLBACK_ROWS
   }
 }
 

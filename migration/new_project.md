@@ -4,13 +4,17 @@ You are starting fresh, or the project exists but has no documentation worth kee
 
 ## Day one — twenty minutes
 
-Create three files and stop.
+Create four files and stop.
 
 **Root pointer** (`AGENTS.md`) from
 [templates/root_pointer.md](../templates/root_pointer.md). Five to fifteen lines: what
 the project is, the order to read `project-workbook/start.md` first, and only the rules that pass
 the admission test in [METHODOLOGY §5](../METHODOLOGY.md#5-tool-independence) — each
 naming where in `project-workbook/` it is stated.
+
+**`ONBOARDING.md`** at the root, from [templates/ONBOARDING.md](../templates/ONBOARDING.md):
+for the person who clones the project rather than for the agent — what works with nothing
+installed, the commit hook to install, the mods to enable. Short; delete what does not apply.
 
 **`project-workbook/overview.md`** from the template. Purpose, stack, structure, and — the field
 people skip — **invariants**: the rules of the project that no linter can check and that

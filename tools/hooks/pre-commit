@@ -23,6 +23,13 @@ python tools/lint_workbook.py || {
     exit 1
 }
 
+# The workbook-triggers mod carries a copy of the RULES.md section 2 table for where it
+# runs installed, without RULES.md beside it. Where that file exists (the standard's own
+# repository), the copy has to match.
+if [ -f tools/mods/workbook-triggers/hooks/register.ts ]; then
+    python tools/check_triggers.py --verify-fallback tools/mods/workbook-triggers/hooks/register.ts || exit 1
+fi
+
 # Not a gate: when code is staged and the workbook is not, print the update triggers of
 # RULES.md section 2, the moment their entry can still go into this same commit.
 python tools/check_triggers.py || true

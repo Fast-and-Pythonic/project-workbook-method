@@ -40,7 +40,13 @@ hook's copy stays.
 
 ## Enabling it
 
-The mod runs from this folder. Pick one:
+From a terminal session, installed from the standard's marketplace:
+
+```
+/plugin install workbook-loader --marketplace Fast-and-Pythonic/project-workbook-method
+```
+
+Or run it from this folder:
 
 - **One session:** `claude --plugin-dir <path to this folder>`.
 - **Every session for this user:** name the folder in `CLAUDE_CODE_PLUGIN_DIRS`, either in

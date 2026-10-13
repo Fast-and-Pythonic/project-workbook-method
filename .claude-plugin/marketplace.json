@@ -1,0 +1,19 @@
+{
+  "name": "project-workbook-method",
+  "owner": {
+    "name": "Fast-and-Pythonic"
+  },
+  "description": "Claude Code mods of the Project Workbook standard: the workbook loaded at session start, and the update triggers applied at the end of a turn.",
+  "plugins": [
+    {
+      "name": "workbook-loader",
+      "source": "./tools/mods/workbook-loader",
+      "description": "Loads the project workbook's start.md, status.md and newest journal entries into the session before its first turn, in full."
+    },
+    {
+      "name": "workbook-triggers",
+      "source": "./tools/mods/workbook-triggers",
+      "description": "At the end of a turn with signs of recordable work, asks a fork of the session whether an update trigger fired, and has the agent write the entry."
+    }
+  ]
+}

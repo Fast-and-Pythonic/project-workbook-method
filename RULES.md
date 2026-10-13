@@ -33,6 +33,13 @@ formats and the hard rules are identical at every tier.
 | `corpus.md` | S | grows | Register of run configurations — the key to every measurement | **[R]** |
 | `plan/*.md` | S | — | Tasks with acceptance criteria, plus `backlog.md` | **[R]** |
 
+**Beside the workbook, at the project root:**
+
+| File | Tier | For | Role | |
+|------|------|-----|------|--|
+| `AGENTS.md` | S | the agent | The root pointer: read `start.md` first, plus the few critical rules (H11). Template: `templates/root_pointer.md` | |
+| `ONBOARDING.md` | S | a person | What works with nothing installed, what to install (the commit hook, the tools), what to enable in their own agent — a repository cannot enable a mod for a visitor. Template: `templates/ONBOARDING.md`; lint check 21 | |
+
 The tier column says from which size a file is **expected**. Below that tier it is not
 missing, it is unwarranted: a one-area project with no `subsystems/` is complete, not
 half-documented. Above it, an absent file is a gap worth explaining.
@@ -227,6 +234,7 @@ projects this standard came from.
 | 18 | `_meta.md` is present, names the standard, and carries the version it was audited against (H10). An **error** since 2026-09-13. Without it a document set cannot say which rules it is being held to, and a session has to guess; without the version, "behind" and "never compliant" look the same | |
 | 19 | Every critical rule in a root pointer names its place in `project-workbook/` — a path that exists or a register id that resolves (H11). An **error**. More than five rules or twenty lines in a pointer — a warning | |
 | 20 | A limit overridden in the project's config with no comment saying why, or overridden to the default value — a warning (§1) | |
+| 21 | `ONBOARDING.md` at the project root is present and its links resolve — warnings both (§1). `paths.onboarding = ""` turns it off for a document set nobody else will join | |
 
 Three of these are subtler than they look, and the subtlety is load-bearing. Do not
 simplify them away:

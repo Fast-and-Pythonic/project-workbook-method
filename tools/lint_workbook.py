@@ -56,6 +56,10 @@ DEFAULTS = {
                         ".gradle", ".idea", "__pycache__", "venv", ".venv"],
         "root_pointers": ["AGENTS.md", "CLAUDE.md", ".cursorrules",
                           ".github/copilot-instructions.md"],
+        # The file for a person joining the project: what works with nothing installed,
+        # what to install, what to enable in their agent (check 21). "" turns it off, for
+        # a document set nobody else will ever join.
+        "onboarding": "ONBOARDING.md",
         "allow": [],
     },
     "profile": {"name": "engineering"},
@@ -223,6 +227,7 @@ class Ctx:
         self.path_allow = set(p.get("allow", []))
         self.tier = cfg.get("project", {}).get("tier", "S")
         self.root_pointers = [self._abs(f) for f in p.get("root_pointers", [])]
+        self.onboarding = self._abs(p["onboarding"]) if p.get("onboarding") else None
 
         self.registers = {k: os.path.join(self.docs, v)
                           for k, v in cfg["registers"].items()
@@ -893,6 +898,32 @@ def check_root_pointers(ctx, known):
                             f"the register id where it lives (H11): \"{head}…\"")
 
 
+def check_onboarding(ctx):
+    """21. The project has a file for the person joining it, and its links resolve.
+
+    AGENTS.md and the workbook are for the agent. Nothing told a person who clones the
+    project what works with nothing installed, which hooks and tools to set up, and
+    which mods or skills to enable in their own agent — and a repository cannot enable a
+    mod for a visitor, so that step is theirs to take or it does not happen.
+
+    Warnings only, both of them: the file is new in v3.1, and under the release policy
+    (DEVIATIONS.md §6) a check that tightens the standard ships as a warning.
+    """
+    if ctx.onboarding is None:
+        return
+    where = ctx.rel(ctx.onboarding)
+    if not os.path.exists(ctx.onboarding):
+        warn(where, "absent — what a person joining the project installs and enables; "
+                    "see templates/ONBOARDING.md (RULES.md §1)")
+        return
+    for target in MD_LINK_RE.findall(strip_code(read(ctx.onboarding))):
+        if target.startswith(("http://", "https://", "mailto:")):
+            continue
+        resolved = os.path.normpath(os.path.join(os.path.dirname(ctx.onboarding), target))
+        if not os.path.exists(resolved):
+            warn(where, f"broken link -> {target}")
+
+
 def check_tier_inventory(ctx):
     """A file expected from this tier upward is absent (RULES.md §1, Tier column).
 
@@ -1301,6 +1332,7 @@ def main():
     check_journal_index(ctx)
     check_meta(ctx)
     check_root_pointers(ctx, known)
+    check_onboarding(ctx)
     check_tier_inventory(ctx)
     if ctx.research:
         check_backlog_statuses(ctx)

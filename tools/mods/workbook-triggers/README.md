@@ -42,9 +42,15 @@ model; a prefix whose cache entry lapsed is billed afresh once.
 
 ## Enabling it
 
-As for [workbook-loader](../workbook-loader/README.md): `claude --plugin-dir <this folder>`
-for one session, or the folder named in `CLAUDE_CODE_PLUGIN_DIRS` for every session. A
-repository cannot enable it for a visitor.
+From a terminal session, installed from the standard's marketplace:
+
+```
+/plugin install workbook-triggers --marketplace Fast-and-Pythonic/project-workbook-method
+```
+
+Or run it from this folder, as for [workbook-loader](../workbook-loader/README.md):
+`claude --plugin-dir <this folder>` for one session, or the folder named in
+`CLAUDE_CODE_PLUGIN_DIRS` for every session. A repository cannot enable it for a visitor.
 
 Thresholds are options in user settings; 0 turns a sign off:
 

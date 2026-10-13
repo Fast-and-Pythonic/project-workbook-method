@@ -8,6 +8,10 @@ Works for a new project or an existing one.
 - [ ] Copy `templates/root_pointer.md` to the root as `AGENTS.md` (an existing `CLAUDE.md` is renamed, not kept beside it) / `.cursorrules` /
       `.github/copilot-instructions.md`; fill in the name and only the critical rules that pass
       the admission test in METHODOLOGY §5, each naming where in `project-workbook/` it is stated
+- [ ] Copy `templates/ONBOARDING.md` to the root as `ONBOARDING.md`; fill in the project's own
+      tools and what the repository ships for agents, and drop what does not apply
+- [ ] Install the commit hook: `git config core.hooksPath tools/hooks`, with a `pre-commit` that
+      runs the linter and `check_triggers.py` (see `tools/hooks/pre-commit` of the standard)
 - [ ] Copy `templates/start.md` → `project-workbook/start.md` and fill it in
 - [ ] Copy `templates/overview.md` → `project-workbook/overview.md`; fill in purpose, invariants,
       stack, structure

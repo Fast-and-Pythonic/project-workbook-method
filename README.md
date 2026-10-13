@@ -50,8 +50,9 @@ checks that every such link resolves.
 
 **New project.** Copy [templates/](templates/) into `<project>/project-workbook/`, copy the root
 pointer to the project root as `AGENTS.md` — read by Claude Code, Codex, Cursor and others — from
-[templates/root_pointer.md](templates/root_pointer.md), and fill in `start.md` and
-`overview.md`. Everything else is created on its first real entry — never empty.
+[templates/root_pointer.md](templates/root_pointer.md), add
+[templates/ONBOARDING.md](templates/ONBOARDING.md) beside it for the people who join, and
+fill in `start.md` and `overview.md`. Everything else is created on its first real entry — never empty.
 
 **Existing project.** See [migration/](migration/); there is a scenario for each starting
 point.

@@ -116,6 +116,27 @@ def trigger_rows(rules_path):
     return rows
 
 
+def fallback_rows(ts_path):
+    """The FALLBACK_ROWS copy in the workbook-triggers mod, as strings."""
+    with open(ts_path, encoding="utf-8") as f:
+        text = f.read()
+    head = "export const FALLBACK_ROWS: readonly string[] = ["
+    if head not in text:
+        return []
+    block = text.split(head, 1)[1].split("\n]", 1)[0]
+    return [m[1:-1] for m in re.findall(r"^  (['\"].*['\"]),$", block, re.M)]
+
+
+def verify_fallback(ts_path, rules_path):
+    """The standard's own pre-commit: the mod's copy of the table still matches RULES.md."""
+    rows, copy = trigger_rows(rules_path), fallback_rows(ts_path)
+    if rows == copy:
+        return 0
+    print(f"check_triggers: FALLBACK_ROWS in {ts_path} no longer matches RULES.md section 2;"
+          " copy the untagged rows of the table into it.", file=sys.stderr)
+    return 1
+
+
 def report(found, docs, rows):
     lines = []
     for scope, paths in found.items():
@@ -152,7 +173,11 @@ def main():
                     help="staged paths matching this are not code; repeatable")
     ap.add_argument("--rules", default=RULES, help="RULES.md to read the trigger table from")
     ap.add_argument("--strict", action="store_true", help="exit 1 instead of warning")
+    ap.add_argument("--verify-fallback", metavar="REGISTER_TS",
+                    help="only check that the mod's FALLBACK_ROWS match RULES.md, then exit")
     args = ap.parse_args()
+    if args.verify_fallback:
+        return verify_fallback(args.verify_fallback, args.rules)
 
     try:
         root = args.root or git("rev-parse", "--show-toplevel").strip()
