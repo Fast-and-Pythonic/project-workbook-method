@@ -21,7 +21,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "workbook-lint"
-version = "2.2.0"
+version = "2.3.0"
 description = "Linter and index generator for the Project Workbook standard"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -43,10 +43,11 @@ Homepage = "https://github.com/Fast-and-Pythonic/project-workbook-method"
 [project.scripts]
 workbook-lint = "lint_workbook:main"
 workbook-index = "make_index:main"
+workbook-triggers = "check_triggers:main"
 
 [tool.setuptools]
 # The modules stay in tools/ rather than moving into a package directory: every
 # consuming project's _meta.md documents `python <standard>/tools/lint_workbook.py`, and
 # a package layout would invalidate all of them to gain nothing a user can see.
 package-dir = { "" = "tools" }
-py-modules = ["lint_workbook", "make_index"]
+py-modules = ["lint_workbook", "make_index", "check_triggers"]

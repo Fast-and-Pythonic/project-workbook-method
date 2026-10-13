@@ -22,3 +22,7 @@ python tools/lint_workbook.py || {
     echo "--no-verify if you are deliberately committing a broken intermediate state." >&2
     exit 1
 }
+
+# Not a gate: when code is staged and the workbook is not, print the update triggers of
+# RULES.md section 2, the moment their entry can still go into this same commit.
+python tools/check_triggers.py || true

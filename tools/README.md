@@ -142,9 +142,32 @@ creation — which means the entry must be cheaper to create with the tool than 
 That is the whole design goal. An entry written by hand afterwards must carry the `retro`
 marker.
 
+## `check_triggers.py`
+
+The harness-neutral layer of the update triggers ([RULES.md §2](../RULES.md#2-update-triggers)).
+Nothing can tell that a debugging session ran past thirty minutes or that a decision was
+settled; a commit can tell the cheap signal under most of them: code changed and the
+workbook did not. When the staged snapshot shows that, the script prints the trigger table
+— read from `RULES.md` of the standard it sits in, so it cannot drift from it — at the one
+moment the entry can still go into the same commit.
+
+```bash
+python tools/check_triggers.py              # what a pre-commit hook runs
+python tools/check_triggers.py --strict     # exit 1 instead of warning
+```
+
+It warns and exits 0: most code commits are routine, and a gate that fires on routine
+commits teaches `--no-verify`. Each tracked `project-workbook/` covers the tree it sits
+in, so a repository holding several projects is judged per project. Code is any staged
+path outside the workbook that is not Markdown and not under `_backups/`; `--ignore GLOB`
+adds more. Installed through `pipx` it is `workbook-triggers`; there it has no `RULES.md`
+beside it and names the section instead of printing the table. The Claude Code layer
+over the same table is [mods/workbook-triggers/](mods/workbook-triggers/README.md).
+
 ## `hooks/pre-commit`
 
-Runs the linter before every commit. Install once:
+Runs the linter before every commit, then `check_triggers.py` as a reminder that never
+fails the commit. Install once:
 
 ```bash
 git config core.hooksPath tools/hooks
@@ -163,6 +186,15 @@ output is. Where the command hook below also runs, the mod drops that hook's cop
 `start.md`, so the agent sees one. If the mod fails, the hook's copy stays: that is the
 fallback, not a bug. Enabling it is the person's choice: a repository cannot turn a mod on
 for a visitor. See [mods/workbook-loader/README.md](mods/workbook-loader/README.md).
+
+## `mods/workbook-triggers/`
+
+A Claude Code mod for the update triggers. It counts cheap signs during the session — code
+edited with no workbook edit, the same error failing again and again, half an hour of
+work — and when one crosses its threshold at the end of a turn it asks a fork of the
+session, served from the prompt cache, whether a trigger of RULES.md §2 fired. On a yes it
+sends the agent back to write the entry before it stops; the mod itself writes nothing.
+See [mods/workbook-triggers/README.md](mods/workbook-triggers/README.md).
 
 ## `hooks/claude-code-session-start.sh`
 

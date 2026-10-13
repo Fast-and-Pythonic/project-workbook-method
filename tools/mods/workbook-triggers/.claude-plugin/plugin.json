@@ -1,0 +1,26 @@
+{
+  "name": "workbook-triggers",
+  "version": "0.1.0",
+  "description": "At the end of a turn with cheap signs of recordable work (code edits with no workbook edit, a run of failures on one error, half an hour of work), asks a fork of the session whether an update trigger of RULES.md section 2 fired, and if so has the agent write the entry before it stops.",
+  "author": { "name": "Fast-and-Pythonic" },
+  "userConfig": {
+    "minCodeEdits": {
+      "type": "number",
+      "title": "Code edits before a check",
+      "description": "Edits of code files (not Markdown, not the workbook) since the last workbook edit that make the end of a turn ask the fork. 0 turns this signal off.",
+      "default": 3
+    },
+    "failureRun": {
+      "type": "number",
+      "title": "Failures on one error",
+      "description": "Failed shell runs with the same error since the last workbook edit that make the end of a turn ask the fork. 0 turns this signal off.",
+      "default": 3
+    },
+    "workMinutes": {
+      "type": "number",
+      "title": "Minutes of work",
+      "description": "Minutes of model turns since the last workbook edit that make the end of a turn ask the fork. 0 turns this signal off.",
+      "default": 30
+    }
+  }
+}

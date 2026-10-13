@@ -119,6 +119,15 @@ sets this standard is kept on, the table was present and unapplied in three. Tha
 the honest failure rate of capture that depends on a session noticing, and the reason
 automated capture is a live question rather than a rejected one — see §6.
 
+**Two reminders sit on the cheap signal underneath.** Neither decides that a trigger
+fired; each puts the table in front of someone at the moment the entry is cheapest.
+`tools/check_triggers.py`, run from the pre-commit hook, warns when a commit stages code
+and leaves the workbook untouched, and never fails the commit. In Claude Code the
+`workbook-triggers` mod counts code edits, repeated failures and minutes of work since the
+last workbook edit, asks a fork of the session whether a trigger fired, and on a yes sends
+the agent back to write the entry before the turn ends. Both are in [tools/](tools/README.md);
+the first works everywhere, the second only where the person enabled it.
+
 ---
 
 ## 3. Session protocol
@@ -327,8 +336,11 @@ pass over the session that proposes candidate entries — addresses exactly that
 and the objection that it would record wrong conclusions applies to the manual route
 too: the same audit found a `_meta.md` describing a file layout months out of date and a
 root pointer citing an entry that did not exist. The gate belongs at *promotion* — what
-gets a number and enters a register — not at capture. Nothing here has been tried yet;
-see §2 for why the triggers as written are advice rather than rules.
+gets a number and enters a register — not at capture. The first step is in use: the
+`workbook-triggers` mod (§2) has a fork of the session propose the entries a trigger owes,
+and the agent writes them, through the same index check as any entry. Whether it lowers
+the share of code work that leaves the workbook untouched is being measured, not assumed.
+See §2 for why the triggers as written are advice rather than rules.
 
 A reader arriving at this section from a session that has just polished the map should
 notice the pull to defend it. The two paragraphs above were rewritten on 2026-09-14 for
