@@ -1,7 +1,7 @@
 # Profiles and tiers — the two axes
 
 A project's document set is adjusted along two axes that do not interact. Pick one value
-on each and record both in `ai_docs/_meta.md`.
+on each and record both in `project-workbook/_meta.md`.
 
 | Axis | Answers | Values | Defined in |
 |------|---------|--------|------------|

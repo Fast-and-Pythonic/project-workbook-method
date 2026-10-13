@@ -42,7 +42,7 @@ actually ask. Every question you have answered more than once is a line in the g
 | A trap | `gotchas.md` as a `G##` |
 | Current state, fragile points | `status.md` |
 | History of how things went | `journal.md` — one entry summarising the past, not a reconstruction of every week |
-| Instructions for users | Leave in `README.md`. Do not copy it into `ai_docs/` |
+| Instructions for users | Leave in `README.md`. Do not copy it into `project-workbook/` |
 
 Anything that does not fit one of these rows is a candidate for deletion. "It might be
 useful" is how a document set becomes unreadable.
@@ -50,7 +50,7 @@ useful" is how a document set becomes unreadable.
 ## Step 4 — the root pointer
 
 Replace whatever grew at the root with the thin pointer. Everything it used to say must
-now exist, in full, inside `ai_docs/` — a pointer holds nothing of its own.
+now exist, in full, inside `project-workbook/` — a pointer holds nothing of its own.
 
 ## Step 5 — check it with fresh eyes
 

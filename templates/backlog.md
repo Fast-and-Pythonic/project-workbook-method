@@ -2,7 +2,7 @@
 
 Tasks with acceptance criteria. Research profile.
 
-<A **legitimate exception** to "no task lists in ai_docs/" — earned by the format, not
+<A **legitimate exception** to "no task lists in project-workbook/" — earned by the format, not
 granted by convenience. Record it as such in your DELTA.md.>
 
 **Status legend:** `open`, `in progress`, `done`, `obsolete`, `dropped`

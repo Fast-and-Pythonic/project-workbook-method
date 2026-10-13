@@ -5,7 +5,7 @@
 Running the scripts by path works, and is what every project's `_meta.md` documents:
 
 ```bash
-python <standard>/tools/lint_docs.py --config tools/lint_docs.toml
+python <standard>/tools/lint_workbook.py --config tools/lint_workbook.toml
 ```
 
 That is fine on one machine and exactly wrong for a project going public: a contributor
@@ -14,35 +14,35 @@ layout. So the tools are installable, and then a project depends on a *version* 
 instead:
 
 ```bash
-pipx install git+https://github.com/Fast-and-Pythonic/ai-docs-method
-ai-docs-lint  --config tools/lint_docs.toml
-ai-docs-index --config tools/lint_docs.toml
+pipx install git+https://github.com/Fast-and-Pythonic/project-workbook-method
+workbook-lint  --config tools/lint_workbook.toml
+workbook-index --config tools/lint_workbook.toml
 ```
 
 No dependencies — both are standard library only, so installing them cannot disturb a
-project's own environment. Reading a `lint_docs.toml` wants Python 3.11 for `tomllib`;
+project's own environment. Reading a `lint_workbook.toml` wants Python 3.11 for `tomllib`;
 on anything older the tools say so and fall back to defaults and command-line flags
 rather than failing.
 
 **Why the tools may be copied and the prose may not.** The standard is two things, and
 "never copy it" belongs to only one of them. `RULES.md`, `FORMATS.md` and
 `METHODOLOGY.md` are prose: copy those and the copies drift until neither can be
-trusted, which is the disease the method was written against. `lint_docs.py` is code,
+trusted, which is the disease the method was written against. `lint_workbook.py` is code,
 and a second copy of code is not a second source of truth — it is version skew, which
 ordinary release machinery already solves. Pin a version, install it, and the question
 stops being interesting. What is *not* acceptable is the third option, and one project
 had it: a hand-modified copy of the linter, 304 lines running six of eighteen checks,
 reporting a clean run on a document set nobody was checking.
 
-## `lint_docs.py`
+## `lint_workbook.py`
 
 Checks what can be checked about a document set. Backs the hard rules in
 [RULES.md](../RULES.md); the full list of checks is there, with the reason each exists.
 
 ```bash
-python tools/lint_docs.py                                  # uses lint_docs.toml
-python tools/lint_docs.py --docs ai_docs --profile research
-python tools/lint_docs.py --docs /path/to/other/ai_docs    # audit another project
+python tools/lint_workbook.py                                  # uses lint_workbook.toml
+python tools/lint_workbook.py --docs project-workbook --profile research
+python tools/lint_workbook.py --docs /path/to/other/project-workbook    # audit another project
 ```
 
 Exit code 0 means clean; warnings are allowed. Exit code 1 means at least one error.
@@ -57,7 +57,7 @@ people to pass `--no-verify`, and that disables it for good.
 Requires Python 3.11+ for `tomllib`. On an older interpreter it still runs, using the
 built-in defaults plus command-line flags, and says so.
 
-**Configuration** is [lint_docs.toml](lint_docs.toml), beside the script. It exists to
+**Configuration** is [lint_workbook.toml](lint_workbook.toml), beside the script. It exists to
 teach the linter your layout and the metric names your project uses; every value has a
 default.
 
@@ -76,7 +76,7 @@ line to the file its entry is in. A prefix may be longer than one letter (`EG`),
 `[registers]` table replaces the defaults rather than extending them, so a document set
 with its own prefixes lists only those.
 
-**Another document set.** `--config path/to/lint_docs.toml` points the linter at a
+**Another document set.** `--config path/to/lint_workbook.toml` points the linter at a
 config kept beside the documents rather than beside the script. A relative `root` in a
 config is resolved against the config file, so the command works from any directory.
 
@@ -107,7 +107,7 @@ the error count alone.
 ## `make_index.py`
 
 Generates a register's index from its entries — the producer behind rule H1, which
-lint_docs.py only checks.
+lint_workbook.py only checks.
 
 ```bash
 python tools/make_index.py                 # every register in the config
@@ -156,14 +156,14 @@ are consequently demoted to advice — see [DEVIATIONS.md](../DEVIATIONS.md).
 
 ## `hooks/claude-code-session-start.sh`
 
-Loads `ai_docs/start.md` into a Claude Code session before its first turn. This is the
+Loads `project-workbook/start.md` into a Claude Code session before its first turn. This is the
 mechanism behind step 1 of the session protocol ([RULES.md §3](../RULES.md#3-session-protocol)):
 without it, reading `start.md` rests on an instruction in the root pointer, and an agent
 that judges a task too small to count as "starting work" skips it — in the case that
 prompted this, on exactly the edit whose right file `start.md` would have named.
 
 Install it as a `SessionStart` hook; the header of the script has the snippet. It needs
-`jq`, finds `ai_docs/` in the session's directory or at the root of its git repository,
+`jq`, finds `project-workbook/` in the session's directory or at the root of its git repository,
 and says nothing where there is none, so a global install is harmless.
 
 It loads `start.md` alone and caps it at `MAX_BYTES` (8000 by default), cutting at a whole
@@ -178,7 +178,7 @@ called that.
 
 ## `hooks/claude-code-guard-pointer.sh`
 
-Stops a Claude Code edit to the root `CLAUDE.md` of a project kept to this standard and
+Stops a Claude Code edit to the root pointer (`AGENTS.md`, or a `CLAUDE.md` not yet renamed) of a project kept to this standard and
 asks the person, showing why: the pointer holds no knowledge of its own
 ([METHODOLOGY §5](../METHODOLOGY.md#5-tool-independence)). The pointer is the one file a
 session knows is always loaded, so "write this down so it does not happen again" tends to
@@ -186,7 +186,7 @@ land there; lint check 19 catches the result at commit time, this catches the mo
 writing.
 
 Install it as a `PreToolUse` hook; the header of the script has the snippet. It needs
-`jq` and acts only where `ai_docs/start.md` sits next to the `CLAUDE.md`, so a global
+`jq` and acts only where `project-workbook/start.md` sits next to the pointer, so a global
 install is harmless. It asks rather than refuses, because editing the pointer is
 sometimes the task; with no one to ask, as under `claude -p`, the ask becomes a refusal.
 Shell writes are matched by a coarse pattern, and one that slips past it is not caught.

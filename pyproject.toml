@@ -1,16 +1,16 @@
 # Packaging for the two tools, so a project can depend on a *version* of them instead of
 # a path on somebody's machine.
 #
-#   pipx install git+https://github.com/Fast-and-Pythonic/ai-docs-method
-#   ai-docs-lint  --config tools/lint_docs.toml
-#   ai-docs-index --config tools/lint_docs.toml
+#   pipx install git+https://github.com/Fast-and-Pythonic/project-workbook-method
+#   workbook-lint  --config tools/lint_workbook.toml
+#   workbook-index --config tools/lint_workbook.toml
 #
 # Why this exists at all: the standard is two different things, and the "never copy it"
 # rule belongs to only one of them. RULES.md, FORMATS.md and METHODOLOGY.md are prose —
-# copy those and the two copies drift until neither can be trusted. lint_docs.py is code,
+# copy those and the two copies drift until neither can be trusted. lint_workbook.py is code,
 # and a copy of code is not a second source of truth, it is a version skew, which is a
 # solved problem with ordinary release machinery. A project that pinned a version and
-# installed it is in a better position than one pointing at ../../ai-docs-method-pub.
+# installed it is in a better position than one pointing at ../../project-workbook-method.
 #
 # Running the scripts by path keeps working and is still what the projects' own _meta.md
 # documents; nothing here moves a file.
@@ -20,13 +20,13 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ai-docs-lint"
+name = "workbook-lint"
 version = "2.2.0"
-description = "Linter and index generator for the ai_docs documentation standard"
+description = "Linter and index generator for the Project Workbook standard"
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.8"
-keywords = ["documentation", "linter", "ai_docs"]
+keywords = ["documentation", "linter", "project-workbook"]
 classifiers = [
   "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
@@ -38,15 +38,15 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/Fast-and-Pythonic/ai-docs-method"
+Homepage = "https://github.com/Fast-and-Pythonic/project-workbook-method"
 
 [project.scripts]
-ai-docs-lint = "lint_docs:main"
-ai-docs-index = "make_index:main"
+workbook-lint = "lint_workbook:main"
+workbook-index = "make_index:main"
 
 [tool.setuptools]
 # The modules stay in tools/ rather than moving into a package directory: every
-# consuming project's _meta.md documents `python <standard>/tools/lint_docs.py`, and
+# consuming project's _meta.md documents `python <standard>/tools/lint_workbook.py`, and
 # a package layout would invalidate all of them to gain nothing a user can see.
 package-dir = { "" = "tools" }
-py-modules = ["lint_docs", "make_index"]
+py-modules = ["lint_workbook", "make_index"]

@@ -6,9 +6,9 @@ in the numbering means a deleted entry, and that is a lint error.
 
 | Register | File | What goes there | Profile |
 |----------|------|-----------------|---------|
-| `G##` | `ai_docs/gotchas.md` | A gotcha: something that has already cost time and will again | core |
-| `A##` | `ai_docs/architecture.md` | A settled decision about how the project is built | core |
-| `E##` | `ai_docs/experiments.md` | A hypothesis tested by measurement — whatever the outcome | research |
+| `G##` | `project-workbook/gotchas.md` | A gotcha: something that has already cost time and will again | core |
+| `A##` | `project-workbook/architecture.md` | A settled decision about how the project is built | core |
+| `E##` | `project-workbook/experiments.md` | A hypothesis tested by measurement — whatever the outcome | research |
 
 **Choosing a register.** Ask: is this a trap, a decision, or a test? If the entry will
 have to be rewritten after the next measurement, it is an `E##`, not an `A##`. An `A##`
@@ -178,7 +178,7 @@ Three rules carry the whole construction:
 
 ## Journal entries
 
-`ai_docs/journal.md` is append-only, newest on top. An entry is 5–10 lines: what was
+`project-workbook/journal.md` is append-only, newest on top. An entry is 5–10 lines: what was
 done, and links. Details live in register entries and in the data; the journal does not
 restate them.
 

@@ -1,7 +1,9 @@
-# ai-docs-method
+# Project Workbook
 
-A standard for project documentation written to be read by an AI coding agent — and
-checked by a linter, so it stays true.
+A standard for a project's working notebook — `project-workbook/` — written to be read by
+an AI coding agent and checked by a linter, so it stays true. A workbook, not
+documentation: user guides stay in `README.md` and `docs/`; this folder holds what the
+work itself taught — state, decisions, traps — and is written as the work happens.
 
 Not a prompt library and not a set of rules for the agent's behaviour. It is a place to
 put the knowledge a session pays for and would otherwise throw away.
@@ -46,8 +48,8 @@ checks that every such link resolves.
 
 ## Quick start
 
-**New project.** Copy [templates/](templates/) into `<project>/ai_docs/`, copy the root
-pointer for your tool (`CLAUDE.md`, `.cursorrules`, …) from
+**New project.** Copy [templates/](templates/) into `<project>/project-workbook/`, copy the root
+pointer to the project root as `AGENTS.md` — read by Claude Code, Codex, Cursor and others — from
 [templates/root_pointer.md](templates/root_pointer.md), and fill in `start.md` and
 `overview.md`. Everything else is created on its first real entry — never empty.
 
@@ -59,12 +61,12 @@ point.
 does nothing on its own.
 
 ```bash
-python tools/lint_docs.py --docs path/to/ai_docs --profile engineering
+python tools/lint_workbook.py --docs path/to/project-workbook --profile engineering
 ```
 
 Or install the two tools and depend on a version of them rather than on a path —
-`pipx install git+https://github.com/Fast-and-Pythonic/ai-docs-method` gives you
-`ai-docs-lint` and `ai-docs-index`. See [tools/README.md](tools/README.md), which also
+`pipx install git+https://github.com/Fast-and-Pythonic/project-workbook-method` gives you
+`workbook-lint` and `workbook-index`. See [tools/README.md](tools/README.md), which also
 says why the tools may be copied while the prose may not.
 
 ---

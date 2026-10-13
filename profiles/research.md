@@ -70,13 +70,13 @@ Planned-but-unregistered configurations are written as prose, not as headings. A
 would make the harness accept a configuration that has no data and no baseline; the
 index distinguishes registered from planned, and lint check 12 enforces the distinction.
 
-The register may live beside the measurement data rather than in `ai_docs/`. Put it
+The register may live beside the measurement data rather than in `project-workbook/`. Put it
 where the person about to take a measurement will actually look, and set the path in
-`tools/lint_docs.toml`.
+`tools/lint_workbook.toml`.
 
 ### `plan/*.md` — tasks with acceptance criteria
 
-This is a **legitimate exception** to the standard's "no task lists in `ai_docs/`" rule,
+This is a **legitimate exception** to the standard's "no task lists in `project-workbook/`" rule,
 and every project using this profile should record it as such in its `DELTA.md` — see
 [DEVIATIONS.md §3](../DEVIATIONS.md).
 

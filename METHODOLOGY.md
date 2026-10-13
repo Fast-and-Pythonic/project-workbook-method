@@ -1,4 +1,4 @@
-# METHODOLOGY — the core of the `ai_docs/` standard
+# METHODOLOGY — the core of the Project Workbook standard
 
 Project documentation written to be read by an AI agent, and by the humans who work
 alongside one.
@@ -35,7 +35,7 @@ window, warming a prompt cache — these distribute knowledge *horizontally*, ac
 agents working now. They do nothing *vertically*, across sessions in time. They also
 inherit quality: a root context that reconstructed the project by reading code passes
 that reconstruction, errors included, to everything downstream. Feeding a good root is
-the highest-leverage move available, and that is what `ai_docs/` is for.
+the highest-leverage move available, and that is what `project-workbook/` is for.
 
 **Documentation that lies is worse than none.** The agent will believe it and break
 something that works. This is not a slogan; it is the constraint that shapes the rest
@@ -180,7 +180,7 @@ moment it is needed, and record that you did it on purpose.
 
 ---
 
-## 3. What lives in `ai_docs/`
+## 3. What lives in `project-workbook/`
 
 The core set, present in every project:
 
@@ -199,7 +199,7 @@ Two axes adjust it, and they are independent. **Profiles** add by kind of work:
 [engineering profile](profiles/engineering.md); `experiments.md`, `corpus.md`, `plan/`
 from the [research profile](profiles/research.md). **Tiers** adjust by size — which of
 these files a project of this size has earned, and what its limits are. The authoritative
-version of both is the inventory in [RULES.md §1](RULES.md#1-target-inventory-of-ai_docs);
+version of both is the inventory in [RULES.md §1](RULES.md#1-target-inventory-of-project-workbook);
 the tiers themselves are in [§6](RULES.md#6-tiers-and-scaling).
 
 **A file is created on its first real entry, not in advance.** An empty
@@ -223,15 +223,15 @@ carries no information an agent can act on.
 
 | File | Target size | When it loads |
 |------|-------------|---------------|
-| Root pointer (`CLAUDE.md`, `.cursorrules`, …) | 5–15 lines | Automatically, by the tool |
-| `start.md` | ≤100 | Every session |
-| `status.md` | ≤80 | Every session |
+| Root pointer (`AGENTS.md`) | 5–15 lines | Automatically, by the tool |
+| `start.md` | ≤150 | Every session |
+| `status.md` | ≤150 | Every session |
 | `journal.md` (top entries) | 3–5 entries | Every session |
 | `overview.md` | ≤200 | Most sessions |
 | Register **indexes** | one line per entry | Every session that touches the code |
 | Register **bodies** | by link | Only the entries the task links to |
 | `conventions.md` | ≤300 | Once per session, before writing code |
-| `subsystems/*`, `references/*` | grows | By task context |
+| `subsystems/*`, `references/*` | ≤300 per page, then split | By task context |
 | `_meta.md` | ≤100 | Rarely |
 
 The index-and-body split is what keeps registers usable. A 506-line `gotchas.md` with
@@ -243,27 +243,25 @@ costs one screen to survey and one entry to read.
 
 ## 5. Tool independence
 
-`ai_docs/` contains **no files specific to any AI tool** — no `CLAUDE.md`, no
-`.cursorrules`, no `copilot-instructions.md` inside the folder.
+`project-workbook/` contains **no files specific to any AI tool** — no `AGENTS.md`, no
+`CLAUDE.md`, no `.cursorrules` inside the folder.
 
 The folder is addressed to every reader: any agent, and people. This matters most for
 open source, where contributors arrive with different tools, and it matters for
 longevity, because tools change faster than projects do.
 
-`ai_docs/start.md` is the single entry point. Tool-specific pointer files live at the
-**project root** and hold nothing but a one-line description, an order to read
-`ai_docs/start.md` first, and the few critical rules that pass the admission test below:
+`project-workbook/start.md` is the single entry point. The pointer lives at the **project
+root** as `AGENTS.md` and holds nothing but a one-line description, an order to read
+`project-workbook/start.md` first, and the few critical rules that pass the admission test
+below. `AGENTS.md` is the shared convention: Claude Code, Codex, Cursor and others read it, so
+one file serves every contributor's tool.
 
-| Tool | File at the root |
-|------|------------------|
-| Claude Code | `CLAUDE.md` |
-| Cursor | `.cursorrules` |
-| GitHub Copilot | `.github/copilot-instructions.md` |
-| Windsurf | `.windsurf/rules` |
-
-Create only the pointer for the tool you use; the content is identical, so there is
-nothing to duplicate. Nothing may appear in a pointer file that is not also stated, in
-full, inside `ai_docs/` — each critical rule names that place, and lint checks it (H11).
+**Rename, do not add.** Claude Code reads `AGENTS.md` only where the directory has no
+`CLAUDE.md` of its own (checked on 2.1.296): with both files present the pointer you
+maintain is silently skipped. Move an existing `CLAUDE.md` to `AGENTS.md`. A tool that does
+not read `AGENTS.md` gets a pointer under its own name (`.cursorrules`,
+`.github/copilot-instructions.md`) with the same content. Nothing may appear in a pointer that is not also stated, in
+full, inside `project-workbook/` — each critical rule names that place, and lint checks it (H11).
 
 **The admission test for a critical rule.** A rule belongs in the pointer only if both
 hold: it applies to *every* task in the project, not to a kind of task — kinds of task
@@ -283,10 +281,10 @@ hook in `tools/hooks/`), the pointer matters less still; it matters most for too
 cannot.
 
 **Naming rule:** if a file is named after a tool, it belongs at the root. If a file
-lives in `ai_docs/`, its name describes its content — `start`, `overview`, `gotchas`.
+lives in `project-workbook/`, its name describes its content — `start`, `overview`, `gotchas`.
 
 **Human contributors** are served by the conventional place, `CONTRIBUTING.md`, which
-should mention that the project follows this standard and that `ai_docs/start.md` is
+should mention that the project follows this standard and that `project-workbook/start.md` is
 the entry point.
 
 **Personal per-project settings** — the language you want the agent to speak, local
@@ -297,7 +295,7 @@ their own; only the shared pointer is committed.
 ### A note on `[[wikilinks]]`
 
 The cross-reference syntax in [FORMATS.md](FORMATS.md) is Obsidian's native one, so an
-`ai_docs/` folder opens as an Obsidian vault with no changes: graph view, backlinks and
+`project-workbook/` folder opens as an Obsidian vault with no changes: graph view, backlinks and
 an unresolved-link list, for free. That is a convenience for human readers only.
 
 Nothing in this standard depends on Obsidian, and nothing may come to depend on it.
@@ -306,7 +304,7 @@ The files stay plain markdown that any editor, any agent and `grep` can read —
 
 ---
 
-## 6. Anti-patterns — what does not go in `ai_docs/`
+## 6. Anti-patterns — what does not go in `project-workbook/`
 
 **Anything derivable from the code.** Signatures, variable names, imports, obvious
 hierarchies. Exception: the high-level tree in `overview.md`.
@@ -314,12 +312,12 @@ hierarchies. Exception: the high-level tree in `overview.md`.
 **Change history.** That is `git log`. `status.md` describes the current state;
 `journal.md` records why work went the way it did, not what changed line by line.
 
-**Task lists.** Tasks are tasks; use an issue tracker or a todo list. `ai_docs/` holds
+**Task lists.** Tasks are tasks; use an issue tracker or a todo list. `project-workbook/` holds
 what outlives the current task. Two narrow exceptions: `Deferred` in `status.md` —
 deliberately postponed, with the reason — and, in the research profile, `plan/*.md`,
 which carries acceptance criteria rather than intentions.
 
-**Instructions of the form "do X".** `ai_docs/` is context, not a request. "Implement
+**Instructions of the form "do X".** `project-workbook/` is context, not a request. "Implement
 feature Y" belongs in the conversation.
 
 **Tutorials and general theory.** This is a reference for an agent that already knows
@@ -348,7 +346,7 @@ the meantime the document is actively misleading an agent that has no way to kno
 
 Two mechanisms support this, and both are ordinary engineering rather than virtue:
 
-- **The linter** ([tools/lint_docs.py](tools/lint_docs.py)) checks what can be checked:
+- **The linter** ([tools/lint_workbook.py](tools/lint_workbook.py)) checks what can be checked:
   broken links, gaps in numbering, an index that disagrees with its bodies, a number
   with no source, a file over its limit, a path that no longer exists. Run it at the
   end of a session, and from a pre-commit hook.

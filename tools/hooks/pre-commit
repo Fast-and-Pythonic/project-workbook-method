@@ -16,7 +16,7 @@ python tools/make_index.py --check || {
     exit 1
 }
 
-python tools/lint_docs.py || {
+python tools/lint_workbook.py || {
     echo >&2
     echo "pre-commit: documentation lint failed. Fix the errors above, or commit with" >&2
     echo "--no-verify if you are deliberately committing a broken intermediate state." >&2

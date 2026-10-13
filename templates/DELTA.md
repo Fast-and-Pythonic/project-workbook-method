@@ -1,6 +1,6 @@
 # DELTA — how this project diverges from the standard
 
-<Copy to `<project>/ai_docs_method/DELTA.md`. Only needed if the project actually
+<Copy to `<project>/workbook-method/DELTA.md`. Only needed if the project actually
 deviates. See DEVIATIONS.md of the standard.>
 
 Section references point at the standard at <URL>. Every divergence carries a
@@ -25,7 +25,7 @@ field — it is where you notice that a departure is really two.
 
 ## Legitimate exceptions
 
-Places where this project's `ai_docs/` breaks the standard **on purpose** — recorded so
+Places where this project's `project-workbook/` breaks the standard **on purpose** — recorded so
 a future session does not "tidy them up".
 
 - **<rule broken>.** <What we do instead, and why it stays.>

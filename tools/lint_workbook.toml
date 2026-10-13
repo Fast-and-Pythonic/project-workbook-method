@@ -1,9 +1,9 @@
-# Configuration for lint_docs.py. Every value has a default, so a project can run the
+# Configuration for lint_workbook.py. Every value has a default, so a project can run the
 # linter with no config at all; this file exists to point it at your layout and to
 # teach it the names your project actually uses.
 #
 # Command-line flags win over this file:
-#   python tools/lint_docs.py --docs ai_docs --profile research
+#   python tools/lint_workbook.py --docs project-workbook --profile research
 
 [profile]
 # "engineering" or "research". The research profile turns on the experiment register,
@@ -19,9 +19,9 @@ tier = "S"
 
 [paths]
 root = ".."                   # project root, relative to this file's directory
-docs = "ai_docs"
-method = "ai_docs_method"     # local method folder, if the project has one
-corpus = "ai_docs/corpus.md"  # research only; put it where a measurer will look
+docs = "project-workbook"
+method = "workbook-method"     # local method folder, if the project has one
+corpus = "project-workbook/corpus.md"  # research only; put it where a measurer will look
 baseline = ""                 # research only, e.g. "tools/bench/baseline"
 extra_doc_dirs = []           # other markdown the linter is responsible for, e.g. ["tools"]
 # Directories inside docs/ holding register entries once a register has been split by
@@ -37,13 +37,13 @@ delta_prefixes = ["D"]
 # the tail of any path in the tree, because documentation names a file the way a person
 # does — `model/Screen.kt`, not the full path from a source root nobody writes out. List
 # a root here only to make the common case cheap, not to constrain how paths are written.
-path_roots = ["", "ai_docs"]
+path_roots = ["", "project-workbook"]
 # Never searched when resolving a documented path. A generated tree is far larger than the
 # source it came from, and a path found only inside one is not evidence that the file the
 # documents mean still exists.
 ignore_dirs = [".git", "node_modules", "build", "target", "dist", ".cxx", ".gradle",
                ".idea", "__pycache__", "venv", ".venv"]
-root_pointers = ["CLAUDE.md", ".cursorrules", ".github/copilot-instructions.md"]
+root_pointers = ["AGENTS.md", "CLAUDE.md", ".cursorrules", ".github/copilot-instructions.md"]
 # Paths that legitimately do not exist: an artefact the docs declare as not yet written,
 # a file in someone else's repository, a build output that only exists after a build.
 # Keep the reason beside each one.

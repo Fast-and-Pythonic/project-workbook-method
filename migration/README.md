@@ -6,7 +6,7 @@ Three starting points. Pick the one that matches, then use
 | You have | Read |
 |----------|------|
 | A new project, or one with no documentation at all | [new_project.md](new_project.md) |
-| An existing project with a `CLAUDE.md` / `.cursorrules` that has grown large | [existing_partial_docs.md](existing_partial_docs.md) |
+| An existing project with a `CLAUDE.md`, `AGENTS.md` or `.cursorrules` that has grown large | [existing_partial_docs.md](existing_partial_docs.md) |
 | An existing project with scattered `.md` files and no system | [existing_no_docs.md](existing_no_docs.md) |
 
 ## The one rule for all three

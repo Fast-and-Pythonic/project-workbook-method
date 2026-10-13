@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 #
-# Opens a new E## entry in ai_docs/experiments.md. Research profile.
+# Opens a new E## entry in project-workbook/experiments.md. Research profile.
 #
 # This exists because hard rule H7 (RULES.md) requires the prediction to be written
 # BEFORE the run, and nothing can verify that after the fact. The only real enforcement
@@ -88,7 +88,7 @@ def main():
     ap.add_argument("--method",
                     default="*(configurations, what changed, run order — fill in)*",
                     help="How it will be measured.")
-    ap.add_argument("--docs", default="ai_docs", help="Path to ai_docs/.")
+    ap.add_argument("--docs", default="project-workbook", help="Path to project-workbook/.")
     ap.add_argument("--task-pattern", default=r"[A-Z]-[0-9a-z]+",
                     help="Shape of a task id in the backlog table.")
     ap.add_argument("--date", default=None, help="Override the opening date (YYYY-MM-DD).")

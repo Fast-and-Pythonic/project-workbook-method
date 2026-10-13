@@ -25,8 +25,8 @@ The project is [PATH] ([one-line description of what it is and what it is for]).
 verdict, and most hypotheses are expected to fail.]
 
 Two things are under review:
-  1. ai_docs/          — the project documentation.
-  2. ai_docs_method/   — the local rules for keeping that documentation. It claims to
+  1. project-workbook/          — the project documentation.
+  2. workbook-method/   — the local rules for keeping that documentation. It claims to
                          be a delta over a standard at [STANDARD URL OR PATH].
      [Omit if the project has no local method folder.]
 
@@ -34,7 +34,7 @@ Read them as a session that has never seen this project before. Report on each o
 following, with concrete file:line evidence rather than impressions.
 
 A. COLD START.
-   Starting from ai_docs/start.md, and within a few minutes, can you establish:
+   Starting from project-workbook/start.md, and within a few minutes, can you establish:
    what state the project is in; which task is next and what its acceptance criterion
    is; what has already been tried and rejected; how to take a measurement so that it
    counts as evidence; and what you are forbidden to touch? Name everything you could
@@ -42,7 +42,7 @@ A. COLD START.
 
 B. ARE THE RULES EXECUTABLE?
    RULES.md claims that every hard rule has a real checking mechanism. Test the claim.
-   Run `python tools/lint_docs.py`. Then, for each check it advertises, break it
+   Run `python tools/lint_workbook.py`. Then, for each check it advertises, break it
    deliberately (edit a file, run the linter, revert the edit) and report any check
    that fails to fire, fires for the wrong reason, or is trivial to satisfy without
    meeting the rule's intent. Revert every edit you make.
@@ -50,7 +50,7 @@ B. ARE THE RULES EXECUTABLE?
 C. IS IT TRUE?
    Find anything in the docs that contradicts the code or the data. Worth testing
    specifically: do the documented commands and flags match what the tools actually
-   accept; does every number quoted in ai_docs/ have a traceable source; does the run
+   accept; does every number quoted in project-workbook/ have a traceable source; does the run
    configuration register agree with the report files on disk; do the paths mentioned
    in the docs exist.
 

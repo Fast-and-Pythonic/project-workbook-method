@@ -1,6 +1,6 @@
 # Scenario: a pointer file that grew too large
 
-The commonest starting point. There is a `CLAUDE.md`, a `.cursorrules` or a
+The commonest starting point. There is a `CLAUDE.md`, an `AGENTS.md`, a `.cursorrules` or a
 `copilot-instructions.md` at the root, it started at twenty lines, and it is now several
 hundred. Every session loads all of it, and nobody is sure which parts are still true.
 
@@ -35,7 +35,7 @@ rewrite while splitting — move first, edit afterwards, or you will do both bad
 | "We do it this way because Z" | `architecture.md` as an `A##` |
 | "Currently broken / not implemented / postponed" | `status.md` |
 | "Do not do X, we tried it" | `gotchas.md`, or an `E##` if it was measured **[R]** |
-| Instructions addressed to the agent's behaviour | Stay at the root, in the pointer — only those that pass the admission test in METHODOLOGY §5, each also stated in `ai_docs/` |
+| Instructions addressed to the agent's behaviour | Stay at the root, in the pointer — only those that pass the admission test in METHODOLOGY §5, each also stated in `project-workbook/` |
 
 Two categories deserve a decision rather than a destination:
 
@@ -58,9 +58,9 @@ fine; the index at the top of the register is what makes them findable.
 ## Then shrink the root file
 
 What remains at the root is five to fifteen lines: one sentence about the project, the
-order to read `ai_docs/start.md` first, and the critical rules that pass the admission
+order to read `project-workbook/start.md` first, and the critical rules that pass the admission
 test in [METHODOLOGY §5](../METHODOLOGY.md#5-tool-independence). Nothing in it may be
-absent from `ai_docs/` — a pointer file holds no knowledge of its own.
+absent from `project-workbook/` — a pointer file holds no knowledge of its own.
 
 If a rule feels too important to leave out of the pointer, that is a signal it belongs in
 `start.md`'s "three facts to know up front", where it will be read anyway.

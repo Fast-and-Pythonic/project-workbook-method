@@ -1,6 +1,6 @@
 __pycache__/
 *.pyc
-lint_docs.local.toml
+lint_workbook.local.toml
 
 # Артефакты сборки пакета. Оба каталога создаёт `pip install .`, и в них лежат
 # копии tools/*.py — то есть именно та вторая копия кода, против которой

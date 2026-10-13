@@ -3,7 +3,7 @@
 **Updated:** YYYY-MM-DD
 
 <State only. No chronicle — that is journal.md. Rewritten in place, never appended to.
-Hard limit: 80 lines.>
+Hard limit: 150 lines.>
 
 ## Working
 

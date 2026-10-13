@@ -119,7 +119,7 @@ def main():
                  "       a report from before that flag existed.")
     # Naming a commit is not enough - the name has to have come from the binary. A
     # commit read off a directory is a guess about which checkout was installed, and
-    # with worktrees per subsystem (ai_docs/architecture.md, A01) that guess is wrong
+    # with worktrees per subsystem (project-workbook/architecture.md, A01) that guess is wrong
     # exactly when it matters. --commit still overrides, because stating a build by
     # hand is a deliberate act that gets recorded as such; a silent fallback is not.
     source = report.get("armsx2_commit_source")

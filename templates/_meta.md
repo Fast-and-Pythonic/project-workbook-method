@@ -7,7 +7,7 @@ Standard: <URL of the standard> — audited against <version> on <date>
 <Local working copy, if the standard is also checked out on this machine: the path, marked
 as a copy. The URL goes first — a machine-local path means nothing to a reader of the
 published project.>
-<Local method, only if this project deviates: the folder `ai_docs_method/` at the
+<Local method, only if this project deviates: the folder `workbook-method/` at the
 project root. Where the two disagree, the local method wins. Delete this line if there
 is no local method.>
 
@@ -44,7 +44,7 @@ gets wrong — the list is worth rewriting once you know.>
 ## Checking
 
 ```
-python tools/lint_docs.py --docs ai_docs --profile <profile>
+python tools/lint_workbook.py --docs project-workbook --profile <profile>
 ```
 
 <Run before every commit through a pre-commit hook, or manually as the last step of a

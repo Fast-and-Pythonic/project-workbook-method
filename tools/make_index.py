@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 #
-# Index generator for the registers of an ai_docs/ document set.
+# Index generator for the registers of an project-workbook/ document set.
 #
 # Rule H1 says every register entry has an index line and every index line has an entry,
-# and lint_docs.py checks it. This is the other half: the thing that produces one. A rule
+# and lint_workbook.py checks it. This is the other half: the thing that produces one. A rule
 # with a check and no producer is a rule that reports the same defect every session —
 # nobody assembles twenty-five index lines by hand, and a hand-assembled index drifts from
 # its entries by the next one.
@@ -20,11 +20,11 @@ import os
 import re
 import sys
 
-from lint_docs import (Ctx, load_config, md_files, read, register_entries,
+from lint_workbook import (Ctx, load_config, md_files, read, register_entries,
                        significant_words, strip_code)
 
 # An index line: "- **G07** · Sourcemaps break MAIN-world injection". The separator is
-# cosmetic — lint_docs only requires the "- **ID**" opening — but it stays consistent
+# cosmetic — lint_workbook only requires the "- **ID**" opening — but it stays consistent
 # within a document set, so it is taken from the existing index when there is one.
 DEFAULT_SEP = "·"
 INDEX_LINE_RE = re.compile(r"^- \*\*([A-Za-z]+\d+)\*\*\s*(\S)?")
@@ -176,11 +176,11 @@ def process(ctx, prefix, check):
 
 def main():
     ap = argparse.ArgumentParser(
-        description="Generate the index of an ai_docs/ register from its entries.")
+        description="Generate the index of an project-workbook/ register from its entries.")
     ap.add_argument("--config", default=os.path.join(os.path.dirname(__file__),
-                                                     "lint_docs.toml"))
+                                                     "lint_workbook.toml"))
     ap.add_argument("--root", help="project root (default: from config)")
-    ap.add_argument("--docs", help="path to ai_docs/, relative to root")
+    ap.add_argument("--docs", help="path to project-workbook/, relative to root")
     ap.add_argument("--profile", choices=["engineering", "research"])
     ap.add_argument("--register", action="append", metavar="PREFIX",
                     help="only this register; repeatable (default: all)")

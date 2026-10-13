@@ -16,22 +16,22 @@ A project that departs from the standard keeps its own method folder at the proj
 
 ```
 <project>/
-├── ai_docs/
+├── project-workbook/
 │   └── _meta.md          ← thin pointer to the folder below
-└── ai_docs_method/
+└── workbook-method/
     ├── README.md         ← what is local and why a local method was needed at all
     └── DELTA.md          ← the list of departures, each justified
 ```
 
 Anything not stated locally comes from this standard. Where something **is** stated
-locally, **the local method wins** — and `ai_docs/_meta.md` says so in one line, so a
+locally, **the local method wins** — and `project-workbook/_meta.md` says so in one line, so a
 session never has to guess which document is in charge.
 
 Do not copy rules from the standard into the local folder. Two sources of truth drift
 apart, which is the disease the whole method was written to cure. The local folder holds
 deltas and nothing else.
 
-If a project has no departures, it needs no method folder: `ai_docs/_meta.md` points
+If a project has no departures, it needs no method folder: `project-workbook/_meta.md` points
 straight at the standard.
 
 ---
@@ -68,16 +68,16 @@ than they are removed.
 
 ## 3. Legitimate exceptions
 
-Separate from departures, and just as important: places where the project's `ai_docs/`
+Separate from departures, and just as important: places where the project's `project-workbook/`
 **breaks the standard deliberately** and must be left alone.
 
 ```markdown
 ## Legitimate exceptions
 
-Places where this project's `ai_docs/` breaks the standard on purpose — recorded so a
+Places where this project's `project-workbook/` breaks the standard on purpose — recorded so a
 future session does not "tidy them up".
 
-- **"No task lists in `ai_docs/`".** Ours are `plan/*.md` — a plan with acceptance
+- **"No task lists in `project-workbook/`".** Ours are `plan/*.md` — a plan with acceptance
   criteria, not a todo list, and the primary carrier of intent. It stays.
 - **Decision log inside `status.md`.** Replaced by `journal.md` — see D2.
 ```
@@ -149,7 +149,7 @@ practice.
 
 ### 6.1. A version, and what each project is true against
 
-The standard is **tagged**. Every project's `ai_docs/_meta.md` records the version its
+The standard is **tagged**. Every project's `project-workbook/_meta.md` records the version its
 documents were last audited against, and the date:
 
 ```markdown

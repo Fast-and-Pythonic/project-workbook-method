@@ -88,7 +88,7 @@ inactive; hard rules H6–H9 do not apply.
 
 **`journal.md` stays on.** It is core, not research-specific — it is where "why the work
 went this way" lives once it has been evicted from `status.md`, and the eviction is what
-keeps `status.md` inside its 80-line limit.
+keeps `status.md` inside its 150-line limit.
 
 If the project starts producing hypotheses and measurements — a performance push, a
 tuning constant nobody can justify, a "which of these three approaches is actually

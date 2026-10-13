@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 #
-# Documentation linter for the ai_docs standard.
+# Documentation linter for the Project Workbook standard.
 #
 # Implements the checks specified in RULES.md ("What lint checks"). Every check backs a
 # hard rule there, or catches rot that has actually happened in the projects this
 # standard came from.
 #
-#   python tools/lint_docs.py --docs ai_docs --profile engineering
+#   python tools/lint_workbook.py --docs project-workbook --profile engineering
 #
 # Exit code 0 = clean (warnings allowed), 1 = at least one error.
 #
-# Configuration lives in lint_docs.toml beside this file; every value has a default, so
+# Configuration lives in lint_workbook.toml beside this file; every value has a default, so
 # the linter runs on a project that has no config at all. Command-line flags win over
 # the config file.
 
@@ -34,9 +34,9 @@ except ModuleNotFoundError:  # Python < 3.11
 DEFAULTS = {
     "paths": {
         "root": ".",
-        "docs": "ai_docs",
-        "method": "ai_docs_method",
-        "corpus": "ai_docs/corpus.md",
+        "docs": "project-workbook",
+        "method": "workbook-method",
+        "corpus": "project-workbook/corpus.md",
         "baseline": "",
         "extra_doc_dirs": [],
         # Directories inside docs/ where register entries may live once a register has
@@ -48,13 +48,13 @@ DEFAULTS = {
         # added others of its own numbers the two apart — and the borrowed ones collapse
         # when they are promoted, so renumbering the rest would break live links.
         "delta_prefixes": ["D"],
-        "path_roots": ["", "ai_docs"],
+        "path_roots": ["", "project-workbook"],
         # Directories never searched when resolving a documented path. Generated trees
         # are orders of magnitude larger than the source they come from, and a path that
         # resolves only inside one is not evidence that the documented file exists.
         "ignore_dirs": [".git", "node_modules", "build", "target", "dist", ".cxx",
                         ".gradle", ".idea", "__pycache__", "venv", ".venv"],
-        "root_pointers": ["CLAUDE.md", ".cursorrules",
+        "root_pointers": ["AGENTS.md", "CLAUDE.md", ".cursorrules",
                           ".github/copilot-instructions.md"],
         "allow": [],
     },
@@ -64,8 +64,11 @@ DEFAULTS = {
     "project": {"tier": "S"},
     "registers": {"G": "gotchas.md", "A": "architecture.md", "E": "experiments.md"},
     "limits": {
-        "start.md": 100,
-        "status.md": 80,
+        "start.md": 150,
+        "status.md": 150,
+        # Pages grow by design; past this they warn "split the page", not "stop writing".
+        "subsystems/*.md": 300,
+        "references/*.md": 300,
         "register_split_warn": 60,
         # Which limits are errors. Only a limit that *forces* something belongs here —
         # status.md's exists to refuse a chronicle, not to save bytes. Every other limit
@@ -128,13 +131,12 @@ RESEARCH_ONLY = {"E"}  # registers that exist only in the research profile
 TIERS = ("S", "M", "L")
 
 # Limits a tier moves. Only what a larger project legitimately needs more of appears
-# here: at tier L, status.md carries the fragile points that cross areas while each
-# subsystem's own move to its page, and 120 lines is what that comes to in practice.
-# Anything a project sets explicitly under [limits] wins over these.
+# here. Tier L had status.md at 120 until 2026-10, when the common limit rose to 150
+# and made it moot. Anything a project sets explicitly under [limits] wins over these.
 TIER_LIMITS = {
     "S": {},
     "M": {},
-    "L": {"status.md": 120},
+    "L": {},
 }
 
 # Files expected from a given tier upward (RULES.md §1, the Tier column). Below its tier
@@ -152,7 +154,7 @@ def load_config(path, overrides):
     explicit = {}
     if path and os.path.exists(path):
         if tomllib is None:
-            print("warning  Python < 3.11: cannot read lint_docs.toml, using defaults "
+            print("warning  Python < 3.11: cannot read lint_workbook.toml, using defaults "
                   "and command-line flags only")
         else:
             with open(path, "rb") as f:
@@ -168,6 +170,7 @@ def load_config(path, overrides):
                         explicit.setdefault(section, set()).update(values)
                     else:
                         cfg[section] = values
+            cfg["_config_path"] = path
     for section, key, value in overrides:
         if value is not None:
             cfg.setdefault(section, {})[key] = value
@@ -258,6 +261,7 @@ class Ctx:
             else re.compile(r"(?!)")
         self.number_allow = n["allow"]
 
+        self.config_path = cfg.get("_config_path")
         self.limits = cfg["limits"]
         self.split_warn = int(self.limits.get("register_split_warn", 60))
         self.enforced_limits = set(self.limits.get("enforce", ["status.md"]))
@@ -678,8 +682,46 @@ def check_line_limits(ctx):
                 if forcing:
                     err(ctx.rel(path), f"{n} lines, limit {limit}")
                 else:
-                    warn(ctx.rel(path), f"{n} lines, over the {limit} this project set "
+                    warn(ctx.rel(path), f"{n} lines, over the limit of {limit} "
                                         f"— advisory, not a defect")
+
+
+def check_limit_overrides(ctx):
+    """20. Every limit a project overrides carries its reason, and differs from the default.
+
+    Measured before this check existed: across nine document sets the same default had
+    been overridden to the same value in five configs, and to stale values in two — a
+    status.md limit raised for a table that had since moved out. An override nobody can
+    explain is one nobody dares remove, so the defaults stop meaning anything. A comment
+    on the line, or on the lines right above it, is the reason; the check cannot judge
+    the reason, only that one was written. Warnings: this is housekeeping, not a defect.
+    """
+    if not ctx.config_path or not os.path.exists(ctx.config_path):
+        return
+    defaults = dict(DEFAULTS["limits"])
+    defaults.update(TIER_LIMITS[ctx.tier])
+    where = os.path.relpath(ctx.config_path, ctx.root).replace("\\", "/")
+    section, comment_above = None, False
+    for line in read(ctx.config_path).splitlines():
+        stripped = line.strip()
+        if stripped.startswith("["):
+            section, comment_above = stripped.strip("[] "), False
+            continue
+        if not stripped:
+            comment_above = False
+            continue
+        if stripped.startswith("#"):
+            comment_above = True
+            continue
+        if section == "limits" and "=" in stripped:
+            key = stripped.split("=", 1)[0].strip().strip('"').strip("'")
+            commented = comment_above or "#" in stripped.split("=", 1)[1]
+            value = ctx.limits.get(key)
+            if key in defaults and value == defaults[key]:
+                warn(where, f"limits: {key} = {value!r} is the default — remove the line")
+            elif key not in ("enforce",) and not commented:
+                warn(where, f"limits: {key} overrides the default with no comment saying why")
+        comment_above = False
 
 
 def check_absolute_paths(ctx):
@@ -804,7 +846,7 @@ def pointer_rules(text):
 
 
 def check_root_pointers(ctx, known):
-    """19. Every critical rule in a root pointer is also stated in ai_docs/ (H11).
+    """19. Every critical rule in a root pointer is also stated in project-workbook/ (H11).
 
     A pointer is the one file an agent's tool loads into every session, so it is where a
     session reaches when told "write this down so it does not happen again" — and a rule
@@ -1181,11 +1223,11 @@ def check_acceptance_criteria(ctx):
 # --- entry point --------------------------------------------------------------------
 
 def main():
-    ap = argparse.ArgumentParser(description="Lint an ai_docs/ document set.")
+    ap = argparse.ArgumentParser(description="Lint an project-workbook/ document set.")
     ap.add_argument("--config", default=os.path.join(os.path.dirname(__file__),
-                                                     "lint_docs.toml"))
+                                                     "lint_workbook.toml"))
     ap.add_argument("--root", help="project root (default: from config)")
-    ap.add_argument("--docs", help="path to ai_docs/, relative to root")
+    ap.add_argument("--docs", help="path to project-workbook/, relative to root")
     ap.add_argument("--profile", choices=["engineering", "research"])
     ap.add_argument("--tier", choices=list(TIERS),
                     help="size tier (default: from config, else S)")
@@ -1247,6 +1289,7 @@ def main():
     check_registers(ctx)
     check_register_size(ctx)
     check_line_limits(ctx)
+    check_limit_overrides(ctx)
     check_absolute_paths(ctx)
     check_rel_paths(ctx)
     check_journal_index(ctx)

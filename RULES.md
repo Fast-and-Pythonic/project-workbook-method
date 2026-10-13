@@ -15,20 +15,20 @@ formats and the hard rules are identical at every tier.
 
 ---
 
-## 1. Target inventory of `ai_docs/`
+## 1. Target inventory of `project-workbook/`
 
 | File | Tier | Size | Role | |
 |------|------|------|------|--|
-| `start.md` | S | ≤100 | Entry point: map, situational guide, critical facts | |
+| `start.md` | S | ≤150 | Entry point: map, situational guide, critical facts | |
 | `overview.md` | S | ≤200 | Purpose, **invariants**, stack, structure, phases | |
-| `status.md` | S | **≤80** (L: ≤120) | State only: Working / Fragile points / Blocked / Deferred. Rewritten in place | |
+| `status.md` | S | **≤150** | State only: Working / Fragile points / Blocked / Deferred. Rewritten in place | |
 | `gotchas.md` | S | grows | `G##` plus index | |
 | `_meta.md` | S | ≤100 | Pointer to the rules and the version they are true against; per-project settings | |
 | `architecture.md` | S | grows | `A##` plus index | |
 | `journal.md` | M | grows | Chronicle, append-only, newest on top, with an index | |
 | `conventions.md` | M | ≤300 | Code style, build, test, what must not be auto-formatted | **[E]** |
-| `subsystems/*.md` | M | grows | Compiled knowledge about one part of the tree | **[E]** |
-| `references/*.md` | M | — | External specs, upstream state, third-party formats | **[E]** |
+| `subsystems/*.md` | M | ≤300 per page | Compiled knowledge about one part of the tree | **[E]** |
+| `references/*.md` | M | ≤300 per page | External specs, upstream state, third-party formats | **[E]** |
 | `experiments.md` | S | grows | `E##` plus index | **[R]** |
 | `corpus.md` | S | grows | Register of run configurations — the key to every measurement | **[R]** |
 | `plan/*.md` | S | — | Tasks with acceptance criteria, plus `backlog.md` | **[R]** |
@@ -43,7 +43,15 @@ state. Every other size in the table is advice, and the linter warns rather than
 measured across six document sets, everything a session always reads comes to about 6k
 tokens, so none of these numbers is defending a context budget and an error raised for
 advice only teaches the reader to ignore the linter. See
-[METHODOLOGY §2.3](METHODOLOGY.md#23-layered-loading).
+[METHODOLOGY §2.3](METHODOLOGY.md#23-layered-loading). A page limit (`subsystems/`,
+`references/`) means "split this page", not "stop writing".
+
+**The numbers are the linter's defaults, and a project changes one only with a reason.**
+Set in 2026-10 from nine document sets: five sat at or past the old `status.md` limit of
+80 (80, 80, 82, 86, 122), two had raised it to 160 in their own config, and page limits
+had been invented per project at 180, 200 and 250. A default that half the projects
+override is not a default. An override in `lint_workbook.toml` carries a comment saying
+why; one without a comment, or equal to the default, is a warning (check 20).
 
 ### Creating a file
 
@@ -61,8 +69,8 @@ is visible and deleted in a second. An entry that was never written because its 
 not exist yet is visible to nobody, and costs the same hours over again — which is the
 whole reason this standard exists.
 
-`corpus.md` may live beside the measurement data instead of in `ai_docs/` — set the
-path in `tools/lint_docs.toml`. Put it wherever the person taking a measurement will
+`corpus.md` may live beside the measurement data instead of in `project-workbook/` — set the
+path in `tools/lint_workbook.toml`. Put it wherever the person taking a measurement will
 actually look.
 
 **Task format in `plan/*.md`:** Context → What to do → How to verify → Acceptance
@@ -124,7 +132,7 @@ automated capture is a live question rather than a rejected one — see §6.
    run, not after. **[R]**
 6. **Stop and ask the user** when: a doubt touches the invariants in `overview.md`; a
    contract or the architecture would have to change; the method contradicts reality.
-7. At the end, work through the triggers above and run `python tools/lint_docs.py`.
+7. At the end, work through the triggers above and run `python tools/lint_workbook.py`.
 
 Step 1 is the rule every other step depends on, and by [METHODOLOGY §2.5](METHODOLOGY.md#25-a-rule-without-a-mechanism-is-advice)
 it is advice as long as the only thing behind it is an instruction in the root pointer.
@@ -150,7 +158,7 @@ otherwise it is a dead letter within three sessions.
 |---|------|-----------|--|
 | H1 | Every register entry has an index line, and every index line has an entry | lint: the set of headings equals the set of index IDs | |
 | H2 | Every `[[link]]` resolves | lint: an unresolved id-shaped link (`G05`, `E01`, `D5`) is an **error** — it is a typo, not a forward reference. Links to planned pages and configurations are warnings | |
-| H3 | `status.md` ≤ 80 lines (120 at tier L) | lint: line count. **The only forcing limit, and the only one that is an error.** It exists to refuse an append-only chronicle, not to save bytes — every other limit in the inventory is advice and warns. See [METHODOLOGY §2.3](METHODOLOGY.md#23-layered-loading) for the measurement that settles it | |
+| H3 | `status.md` ≤ 150 lines | lint: line count. **The only forcing limit, and the only one that is an error.** It exists to refuse an append-only chronicle, not to save bytes — every other limit in the inventory is advice and warns. See [METHODOLOGY §2.3](METHODOLOGY.md#23-layered-loading) for the measurement that settles it | |
 | H4 | Numbering has no gaps; a refuted or cancelled entry is never deleted | lint: gap-free numbering. A gap only appears when an entry is removed from the middle; deleting the **last** entry is invisible to lint and is caught by git history instead | |
 | H5 | An absolute path written in prose points at something that exists | lint: existence check. Depends on the convention below | |
 | H6 | Measure only on a configuration registered in `corpus.md` | lint: every report's `corpus_id` exists in the register and matches its directory | **[R]** |
@@ -158,7 +166,7 @@ otherwise it is a dead letter within three sessions.
 | H8 | A measurement number appears only as a headline line linking to its report | lint: a number with a unit in a line with no path ending in `.json` | **[R]** |
 | H9 | A refuted `E##` has a back-link from the task that tempted it | lint: presence of the back-link | **[R]** |
 | H10 | `_meta.md` exists and names the standard the documents are kept to, with the version they were last audited against | lint: the file is present and carries a resolvable standard and a version. Shipped as a warning and **promoted to an error on 2026-09-13**, once every consumer was clean — the release policy in [DEVIATIONS.md §6](DEVIATIONS.md#6-changing-the-standard-itself) working as written, and its first completed cycle | |
-| H11 | Every critical rule in a root pointer (`CLAUDE.md`, `.cursorrules`, …) says where in `ai_docs/` it is stated | lint: each rule under the pointer's *Critical rules* carries a path into the documents that exists, or a register id that resolves. An **error** from the release that introduced it, 2026-10-02: measured across every consumer first, the rules it flagged were each already stated in their documents and lacked only the path. Which rules belong in a pointer at all is a judgement — the admission test in [METHODOLOGY §5](METHODOLOGY.md#5-tool-independence) — and only warns past five rules or twenty lines | |
+| H11 | Every critical rule in a root pointer (`AGENTS.md`, or a tool's own file such as `.cursorrules`) says where in `project-workbook/` it is stated | lint: each rule under the pointer's *Critical rules* carries a path into the documents that exists, or a register id that resolves. An **error** from the release that introduced it, 2026-10-02: measured across every consumer first, the rules it flagged were each already stated in their documents and lacked only the path. Which rules belong in a pointer at all is a judgement — the admission test in [METHODOLOGY §5](METHODOLOGY.md#5-tool-independence) — and only warns past five rules or twenty lines | |
 
 **The convention H5 depends on:** an absolute path written in prose goes in backticks,
 and only then may it contain spaces — where an unquoted path with spaces ends is not
@@ -172,7 +180,7 @@ their only mechanism is step 6 of the protocol.
 
 ## 5. What lint checks
 
-**Scope:** `ai_docs/`, the run-configuration register, and the measurement reports.
+**Scope:** `project-workbook/`, the run-configuration register, and the measurement reports.
 `[[wikilinks]]` inside your method folder are **not** checked — it holds placeholders
 such as `[[E##]]`, which are samples. Its **file** links and absolute paths are checked
 all the same: a rotting path is no less broken for living in the method folder. Fenced
@@ -193,7 +201,7 @@ projects this standard came from.
 | 1 | Broken `[[links]]` and broken markdown links to files | |
 | 2 | Index against headings in every register; gaps in numbering. A register with entries and no index at all is reported once, not once per entry; a register whose entries are numbered under some other scheme (`## 7.` rather than `## G07.`) is a warning, because otherwise every check below passes by finding nothing. Once a register is split by area (§6), the bodies are read from every file under `register_bodies`, and an id with an entry in two files is an error | |
 | 3 | Index line and heading that share no words — a warning; a rename probably went halfway | |
-| 4 | Line limits. An **error** only for the names in `limits.enforce` — `status.md` by default, the one limit that forces something. Every other limit warns, including globs the config names (`subsystems/*.md`), because "this is getting long" is advice and an error raised for advice trains the reader to ignore the output | |
+| 4 | Line limits. An **error** only for the names in `limits.enforce` — `status.md` by default, the one limit that forces something. Every other limit warns, including the page globs (`subsystems/*.md`, `references/*.md`, 300 by default), because "this is getting long" is advice and an error raised for advice trains the reader to ignore the output | |
 | 5 | Absolute paths in prose, checked for existence | |
 | 6 | Repo-relative paths in backticks, checked against a small set of roots | |
 | 7 | `journal.md` index against its entries, counted **per date** | |
@@ -208,7 +216,8 @@ projects this standard came from.
 | 16 | An acceptance criterion that hedges (`noticeably`, `measurable`, `faster than`) without a figure — a warning | **[R]** |
 | 17 | In a split register whose index is grouped under headings that link to each area's file, every id sits under the section of the file its entry is in. Silent for a flat index. This is what breaks when an entry moves between files and the index is not updated to match | |
 | 18 | `_meta.md` is present, names the standard, and carries the version it was audited against (H10). An **error** since 2026-09-13. Without it a document set cannot say which rules it is being held to, and a session has to guess; without the version, "behind" and "never compliant" look the same | |
-| 19 | Every critical rule in a root pointer names its place in `ai_docs/` — a path that exists or a register id that resolves (H11). An **error**. More than five rules or twenty lines in a pointer — a warning | |
+| 19 | Every critical rule in a root pointer names its place in `project-workbook/` — a path that exists or a register id that resolves (H11). An **error**. More than five rules or twenty lines in a pointer — a warning | |
+| 20 | A limit overridden in the project's config with no comment saying why, or overridden to the default value — a warning (§1) | |
 
 Three of these are subtler than they look, and the subtlety is load-bearing. Do not
 simplify them away:
@@ -251,9 +260,9 @@ many such pages a project has earned *is* the tier.
 
 | Tier | The project | Inventory | Limits |
 |------|-------------|-----------|--------|
-| **S** | One area. No subsystem pages earned | The `S` rows of [§1](#1-target-inventory-of-ai_docs) | As written |
+| **S** | One area. No subsystem pages earned | The `S` rows of [§1](#1-target-inventory-of-project-workbook) | As written |
 | **M** | Two to four areas | Adds `journal.md`, `conventions.md`, `subsystems/`, `references/` | As written |
-| **L** | Five or more areas, or a register past the split threshold | Registers split by area under one index | `status.md` ≤120; see below |
+| **L** | Five or more areas, or a register past the split threshold | Registers split by area under one index | As written; see below |
 
 **Tier S is there to legitimise what already works.** A small project running on four
 files, passing lint, with a situational guide that fits on a screen, is not an incomplete
@@ -266,17 +275,17 @@ cross-cutting part in the file everyone loads:
 
 - **Registers** split by area (below). The index stays in the register file.
 - **Fragile points.** A subsystem's fragile points move to its `subsystems/` page;
-  `status.md` keeps the ones that cross areas. That, not a bigger number, is what makes
-  120 lines enough.
+  `status.md` keeps the ones that cross areas. That, not a bigger number, is what keeps
+  it inside its limit.
 - **The situational guide** in `start.md` keeps cross-cutting situations and hands the
   rest to the subsystem pages. A guide that grows one line per area outgrows `start.md`
   at exactly the size where it matters most.
 
 Raising a limit before making those moves treats the symptom. In both projects that blew
 the `status.md` limit fourfold, the file was carrying an append-only chronicle because
-neither had a `journal.md`; with the chronicle evicted, one of them came in at 112 lines
-against a limit of 80 — close enough that the 120 of tier L is a real fit rather than a
-round number, and far enough from 340 that the chronicle was plainly the disease.
+neither had a `journal.md`; with the chronicle evicted, one of them came in at 112 lines —
+far enough from 340 that the chronicle was plainly the disease. Tier L once had its own
+`status.md` limit of 120; the common limit of 150 replaced it.
 
 ### Splitting a register
 
@@ -285,7 +294,7 @@ single top-level index. **Numbering stays sequential across the whole register**
 existing `[[G17]]` breaks.
 
 The linter follows the split: name the directory in `register_bodies` in
-`lint_docs.toml`, keep the index in the register file, and group it under headings that
+`lint_workbook.toml`, keep the index in the register file, and group it under headings that
 link to each area's file — `## Build — [subsystems/build.md](subsystems/build.md)`.
 Checks 2 and 17 then hold the index to the files, which is the part a hand-made split
 gets wrong first.
@@ -330,7 +339,7 @@ every session that read it reproduced the verdict as its own.
 
 ## 7. What we do not write
 
-Beyond the anti-patterns in [METHODOLOGY.md §6](METHODOLOGY.md#6-anti-patterns--what-does-not-go-in-ai_docs):
+Beyond the anti-patterns in [METHODOLOGY.md §6](METHODOLOGY.md#6-anti-patterns--what-does-not-go-in-project-workbook):
 
 - **Retelling the code of a dependency or an upstream tree.** What goes into
   `subsystems/` is what cannot be derived from the source in reasonable time: who owns

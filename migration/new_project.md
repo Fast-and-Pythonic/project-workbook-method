@@ -6,22 +6,22 @@ You are starting fresh, or the project exists but has no documentation worth kee
 
 Create three files and stop.
 
-**Root pointer** (`CLAUDE.md`, `.cursorrules`, …) from
+**Root pointer** (`AGENTS.md`) from
 [templates/root_pointer.md](../templates/root_pointer.md). Five to fifteen lines: what
-the project is, the order to read `ai_docs/start.md` first, and only the rules that pass
+the project is, the order to read `project-workbook/start.md` first, and only the rules that pass
 the admission test in [METHODOLOGY §5](../METHODOLOGY.md#5-tool-independence) — each
-naming where in `ai_docs/` it is stated.
+naming where in `project-workbook/` it is stated.
 
-**`ai_docs/overview.md`** from the template. Purpose, stack, structure, and — the field
+**`project-workbook/overview.md`** from the template. Purpose, stack, structure, and — the field
 people skip — **invariants**: the rules of the project that no linter can check and that
 a session must stop and ask about rather than work around. On day one you may have one.
 Write it anyway.
 
-**`ai_docs/start.md`** from the template. Map, situational guide, three critical facts.
+**`project-workbook/start.md`** from the template. Map, situational guide, three critical facts.
 On day one the guide has two lines and the facts are thin. That is correct; it grows by
 being wrong in a way you notice.
 
-**`ai_docs/_meta.md`** from the template: the profile, the language, the link to the
+**`project-workbook/_meta.md`** from the template: the profile, the language, the link to the
 standard. Twelve lines.
 
 Do not create `gotchas.md`, `architecture.md` or `status.md` yet. There is nothing to put
@@ -41,7 +41,7 @@ and it is how the research profile came to exist in the first place.
 
 ## Wire up the linter
 
-Copy `tools/lint_docs.py` and `tools/lint_docs.toml`, set the paths, and run it. On a
+Copy `tools/lint_workbook.py` and `tools/lint_workbook.toml`, set the paths, and run it. On a
 three-file document set it should pass immediately.
 
 If the project is under version control, install the pre-commit hook now, while it is a

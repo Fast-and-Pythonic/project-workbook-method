@@ -69,7 +69,7 @@ Required fields, enforced by lint check 11:
 | `run_order` | The actual order the runs executed in — see bias 2 in regime A |
 
 **In markdown a number appears only as a single headline line with a link to the
-report.** There are no tables of numbers in `ai_docs/`. Comparisons and history are
+report.** There are no tables of numbers in `project-workbook/`. Comparisons and history are
 generated from the reports, not maintained by hand.
 
 The strictness has a cause. In a project run without this rule, the same handful of

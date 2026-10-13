@@ -11,7 +11,7 @@ A real `D##` from a project that departs from this standard on purpose. See
 limit 150 lines, one line per log entry: `- YYYY-MM-DD — <decision> — <reason>`.
 
 **Locally:** `status.md` holds state only, rewritten in place, ≤80 lines. The chronicle
-moves to `ai_docs/journal.md` — append-only, newest on top.
+moves to `project-workbook/journal.md` — append-only, newest on top.
 
 **Why:** the neighbouring project's `status.md` is 349 lines, more than double the
 standard's own limit, and 236 of them (68%) are the decision log, with individual entries
