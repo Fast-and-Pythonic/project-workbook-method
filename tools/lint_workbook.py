@@ -698,6 +698,12 @@ def check_limit_overrides(ctx):
     """
     if not ctx.config_path or not os.path.exists(ctx.config_path):
         return
+    # The config shipped beside the linter spells out every key on purpose — it is the
+    # reference, and a project with no config of its own is linted against it.
+    if os.path.samefile(ctx.config_path,
+                        os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                     "lint_workbook.toml")):
+        return
     defaults = dict(DEFAULTS["limits"])
     defaults.update(TIER_LIMITS[ctx.tier])
     where = os.path.relpath(ctx.config_path, ctx.root).replace("\\", "/")
