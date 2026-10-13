@@ -10,7 +10,7 @@
 # copy those and the two copies drift until neither can be trusted. lint_workbook.py is code,
 # and a copy of code is not a second source of truth, it is a version skew, which is a
 # solved problem with ordinary release machinery. A project that pinned a version and
-# installed it is in a better position than one pointing at ../../project-workbook-method.
+# installed it is in a better position than one pointing at ../../0_project-workbook-method.
 #
 # Running the scripts by path keeps working and is still what the projects' own _meta.md
 # documents; nothing here moves a file.
