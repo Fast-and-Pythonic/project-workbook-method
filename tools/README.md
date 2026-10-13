@@ -167,7 +167,10 @@ over the same table is [mods/workbook-triggers/](mods/workbook-triggers/README.m
 ## `hooks/pre-commit`
 
 Runs the linter before every commit, then `check_triggers.py` as a reminder that never
-fails the commit. Install once:
+fails the commit. This one is the standard's own, with `tools/` beside it; a project that
+uses the standard from outside copies [templates/pre-commit](../templates/pre-commit)
+instead, which finds the standard beside or above the checkout, or the installed
+commands, and lets the commit through when there is neither. Install once:
 
 ```bash
 git config core.hooksPath tools/hooks

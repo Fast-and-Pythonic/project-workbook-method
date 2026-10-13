@@ -10,8 +10,8 @@ Works for a new project or an existing one.
       the admission test in METHODOLOGY §5, each naming where in `project-workbook/` it is stated
 - [ ] Copy `templates/ONBOARDING.md` to the root as `ONBOARDING.md`; fill in the project's own
       tools and what the repository ships for agents, and drop what does not apply
-- [ ] Install the commit hook: `git config core.hooksPath tools/hooks`, with a `pre-commit` that
-      runs the linter and `check_triggers.py` (see `tools/hooks/pre-commit` of the standard)
+- [ ] Copy `templates/pre-commit` to `tools/hooks/pre-commit` (executable) and enable it:
+      `git config core.hooksPath tools/hooks`
 - [ ] Copy `templates/start.md` → `project-workbook/start.md` and fill it in
 - [ ] Copy `templates/overview.md` → `project-workbook/overview.md`; fill in purpose, invariants,
       stack, structure
