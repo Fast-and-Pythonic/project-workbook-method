@@ -263,6 +263,25 @@ not read `AGENTS.md` gets a pointer under its own name (`.cursorrules`,
 `.github/copilot-instructions.md`) with the same content. Nothing may appear in a pointer that is not also stated, in
 full, inside `project-workbook/` — each critical rule names that place, and lint checks it (H11).
 
+**Why the map does not move into the pointer.** Once every tool in use reads `AGENTS.md`,
+`start.md` can look like a leftover from the time a project needed two pointers and a
+shared file behind them. That was one reason for it and the only one that went away
+(re-examined 2026-10-14). The others stand. The two files change at different rates: the
+map is edited whenever a file or subsystem appears (the triggers in RULES §2), while an
+edit to the pointer stops and asks the person (the guard hook in [tools/hooks/](tools/hooks/)),
+because the pointer is where "write this down" lands. Merged, either every map update
+asks or the guard goes and the pointer fills up again. A map of a hundred lines among
+the critical rules dilutes them, and a tool reads everything in `AGENTS.md` as
+instruction. The folder keeps its own entry point, so it works handed over alone — to a
+person, an Obsidian vault, an agent given only the folder. A document set that is not a
+project needs the same: `my-setup-notes`, the author's private store of knowledge about
+the machine, its tools, network and devices — what would break in any project on that
+machine, so belongs to none — is kept to this standard, and a hook injects the routing
+from its `start.md` into every session of every project, where its own `AGENTS.md` would
+never be read. Where the tool loads `start.md` itself, the extra hop costs nothing. The case for
+merging is a tool with no such loader, where reading `start.md` stays advice; reopen
+the question when a session there is seen skipping it, not before.
+
 **The admission test for a critical rule.** A rule belongs in the pointer only if both
 hold: it applies to *every* task in the project, not to a kind of task — kinds of task
 are what the routing in `start.md` is for; and breaking it *before* `start.md` has been
